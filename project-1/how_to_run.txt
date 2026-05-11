@@ -1,0 +1,6 @@
+To run the Password Generator Pro:
+
+1. Open the "project-1" folder on your computer.
+2. Locate the file named "index.html".
+3. Double-click "index.html" to open it in your default web browser (like Chrome, Firefox, Safari, or Edge).
+4. The application will start immediately. No installation or internet connection is required.

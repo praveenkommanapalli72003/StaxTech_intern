@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Generator Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="generator-container">
+    <div class="header">
+      <h1>PASSWORD GENERATOR</h1>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('password')">Password</button>
+      <button class="tab" onclick="switchTab('phrase')">Passphrase</button>
+      <button class="tab" onclick="switchTab('pin')">PIN</button>
+      <button class="tab" onclick="switchTab('bulk')">Bulk</button>
+    </div>
+
+    <!-- Password Tab -->
+    <div id="passwordTab" class="tab-content active">
+      <label>Password Length: <span id="lengthValue">12</span></label>
+      <input type="range" id="length" min="4" max="64" value="12" oninput="document.getElementById('lengthValue').textContent = this.value" />
+
+      <div class="options">
+        <label><input type="checkbox" id="uppercase" checked /> Uppercase (A-Z)</label><br/>
+        <label><input type="checkbox" id="lowercase" checked /> Lowercase (a-z)</label><br/>
+        <label><input type="checkbox" id="numbers" checked /> Numbers (0-9)</label><br/>
+        <label><input type="checkbox" id="symbols" checked /> Symbols (!@#$...)</label><br/>
+        <label><input type="checkbox" id="excludeAmbiguous" /> Exclude Ambiguous (0O1lI)</label>
+      </div>
+
+      <div class="custom-chars">
+        <input type="text" id="customChars" placeholder="Custom characters to include" />
+      </div>
+
+      <div class="presets">
+        <button onclick="applyPreset('weak')">Weak</button>
+        <button onclick="applyPreset('medium')">Medium</button>
+        <button onclick="applyPreset('strong')">Strong</button>
+        <button onclick="applyPreset('maximum')">Maximum</button>
+      </div>
+
+      <div class="strength-section">
+        <label>Password Strength:</label>
+        <div class="strength-bar">
+          <div id="strengthFill" class="strength-fill"></div>
+        </div>
+        <div class="strength-info">
+          <span id="strengthText">-</span>
+          <span id="entropyText">Entropy: 0 bits</span>
+        </div>
+      </div>
+
+      <button onclick="generatePassword()" class="btn-generate">Generate Password</button>
+      <div class="password-display">
+        <input type="password" id="password" readonly placeholder="Your password will appear here" />
+        <button class="icon-btn" onclick="togglePasswordVisibility()" title="Toggle visibility">👁</button>
+        <button class="icon-btn" onclick="copyPassword()" title="Copy">📋</button>
+      </div>
+      <div class="button-row">
+        <button onclick="savePassword()">Save</button>
+        <button onclick="generatePassword()">↻ Regenerate</button>
+      </div>
+    </div>
+
+    <!-- Passphrase Tab -->
+    <div id="phraseTab" class="tab-content">
+      <label>Number of Words: <span id="wordCountValue">4</span></label>
+      <input type="range" id="wordCount" min="2" max="10" value="4" oninput="document.getElementById('wordCountValue').textContent = this.value" />
+
+      <div class="options">
+        <label><input type="checkbox" id="capitalizeWords" checked /> Capitalize First Letter</label><br/>
+        <label><input type="checkbox" id="includeNumber" checked /> Include Number</label><br/>
+        <label><input type="checkbox" id="includeSymbol" /> Include Symbol</label>
+      </div>
+
+      <div class="separator-option">
+        <label>Separator:</label>
+        <select id="separator">
+          <option value="-">- (hyphen)</option>
+          <option value="_">_ (underscore)</option>
+          <option value=".">. (dot)</option>
+          <option value=" "> (space)</option>
+          <option value="">None</option>
+        </select>
+      </div>
+
+      <button onclick="generatePassphrase()" class="btn-generate">Generate Passphrase</button>
+      <div class="password-display">
+        <input type="password" id="passphrase" readonly />
+        <button class="icon-btn" onclick="togglePhraseVisibility()" title="Toggle visibility">👁</button>
+        <button class="icon-btn" onclick="copyPassphrase()" title="Copy">📋</button>
+      </div>
+    </div>
+
+    <!-- PIN Tab -->
+    <div id="pinTab" class="tab-content">
+      <label>PIN Length: <span id="pinLengthValue">6</span></label>
+      <input type="range" id="pinLength" min="4" max="12" value="6" oninput="document.getElementById('pinLengthValue').textContent = this.value" />
+
+      <div class="options">
+        <label><input type="checkbox" id="pinNoRepeat" /> No Repeated Digits</label><br/>
+        <label><input type="checkbox" id="pinNoSequential" /> No Sequential (123, 321)</label>
+      </div>
+
+      <button onclick="generatePIN()" class="btn-generate">Generate PIN</button>
+      <div class="password-display">
+        <input type="text" id="pin" readonly />
+        <button class="icon-btn" onclick="copyPIN()" title="Copy">📋</button>
+      </div>
+    </div>
+
+    <!-- Bulk Tab -->
+    <div id="bulkTab" class="tab-content">
+      <label>Number of Passwords: <span id="bulkCountValue">5</span></label>
+      <input type="range" id="bulkCount" min="1" max="20" value="5" oninput="document.getElementById('bulkCountValue').textContent = this.value" />
+
+      <label>Password Length: <span id="bulkLengthValue">16</span></label>
+      <input type="range" id="bulkLength" min="8" max="64" value="16" oninput="document.getElementById('bulkLengthValue').textContent = this.value" />
+
+      <button onclick="generateBulk()" class="btn-generate">Generate Bulk Passwords</button>
+      <div class="bulk-output">
+        <textarea id="bulkOutput" readonly placeholder="Generated passwords will appear here"></textarea>
+        <button onclick="copyBulk()">Copy All</button>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="history-section">
+      <div class="history-header">
+        <h3>Saved Passwords</h3>
+        <div class="history-actions">
+          <button onclick="exportPasswords()">Export</button>
+          <button onclick="importPasswords()">Import</button>
+          <button onclick="clearHistory()" class="btn-clear">Clear</button>
+        </div>
+      </div>
+      <ul id="passwordHistory"></ul>
+    </div>
+
+    <input type="file" id="importFile" style="display:none" accept=".json" onchange="handleImport(event)" />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

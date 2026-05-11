@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Currency Converter Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="converter-container">
+    <header>
+      <h1><i class="fas fa-exchange-alt"></i> Currency Converter</h1>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('convert')">Convert</button>
+      <button class="tab" onclick="switchTab('multi')">Multi</button>
+      <button class="tab" onclick="switchTab('favorites')">Favorites</button>
+    </div>
+
+    <!-- Convert Tab -->
+    <div id="convertTab" class="tab-content active">
+      <div class="amount-input">
+        <label>Amount</label>
+        <input type="number" id="amount" value="1" min="0" step="0.01" />
+      </div>
+
+      <div class="currency-row">
+        <div class="currency-box from">
+          <label>From</label>
+          <div class="select-wrapper">
+            <img id="fromFlag" src="https://flagcdn.com/48x36/us.png" alt="flag" />
+            <select id="fromCurrency"></select>
+          </div>
+        </div>
+
+        <button class="swap-btn" onclick="swapCurrencies()" title="Swap">
+          <i class="fas fa-exchange-alt"></i>
+        </button>
+
+        <div class="currency-box to">
+          <label>To</label>
+          <div class="select-wrapper">
+            <img id="toFlag" src="https://flagcdn.com/48x36/in.png" alt="flag" />
+            <select id="toCurrency"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-display">
+        <div class="rate-info">
+          <span id="exchangeRate">Loading rate...</span>
+          <span id="lastUpdated"></span>
+        </div>
+        <div class="converted-amount" id="convertedResult">-</div>
+      </div>
+
+      <button class="convert-btn" onclick="convertCurrency()">Convert</button>
+      <button class="save-btn" onclick="addToFavorites()"><i class="fas fa-star"></i> Save Pair</button>
+    </div>
+
+    <!-- Multi Currency Tab -->
+    <div id="multiTab" class="tab-content">
+      <div class="amount-input">
+        <label>Amount</label>
+        <input type="number" id="multiAmount" value="1" min="0" step="0.01" />
+      </div>
+
+      <div class="base-currency">
+        <label>Base Currency</label>
+        <div class="select-wrapper">
+          <img id="multiBaseFlag" src="https://flagcdn.com/48x36/us.png" alt="flag" />
+          <select id="multiBaseCurrency"></select>
+        </div>
+      </div>
+
+      <div class="target-currencies">
+        <label>Convert to:</label>
+        <div class="currency-tags" id="targetCurrencies"></div>
+        <button class="add-currency-btn" onclick="showCurrencyPicker('multi')">+ Add Currency</button>
+      </div>
+
+      <button class="convert-btn" onclick="convertMultiple()">Convert All</button>
+
+      <div class="multi-results" id="multiResults"></div>
+    </div>
+
+    <!-- Favorites Tab -->
+    <div id="favoritesTab" class="tab-content">
+      <div class="favorites-list" id="favoritesList"></div>
+      <button class="clear-favorites" onclick="clearFavorites()">Clear All</button>
+    </div>
+
+    <!-- Currency Picker Modal -->
+    <div class="modal" id="currencyPicker">
+      <div class="modal-content">
+        <h3>Select Currency</h3>
+        <input type="text" id="currencySearch" placeholder="Search currency..." oninput="filterCurrencies()" />
+        <div class="currency-list" id="currencyList"></div>
+        <button class="close-modal" onclick="closeCurrencyPicker()">Close</button>
+      </div>
+    </div>
+
+    <footer>
+      <span id="apiStatus"><i class="fas fa-circle"></i> API Ready</span>
+      <a href="https://www.exchangerate-api.com" target="_blank">Powered by ExchangeRate-API</a>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

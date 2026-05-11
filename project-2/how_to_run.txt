@@ -1,0 +1,7 @@
+To run the Currency Converter Pro:
+
+1. Open the "project-2" folder on your computer.
+2. Locate the file named "index.html".
+3. Double-click "index.html" to open it in your default web browser (like Chrome, Firefox, Safari, or Edge).
+4. Ensure your computer is connected to the internet so the app can fetch the latest live currency exchange rates.
+5. The application will start immediately in your browser. No additional software installation is needed.
